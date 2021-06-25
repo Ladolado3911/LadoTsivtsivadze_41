@@ -49,7 +49,7 @@ class ViewController: UIViewController {
     // მოახდინეთ DispatchQueue, DispatchGroup და DispatchSemaphore-ის ინიციალიზაცია
         let dispatchQueue = DispatchQueue(label: "dispatch", attributes: .concurrent)
         let dispatchGroup = DispatchGroup()
-        let semaphore = DispatchSemaphore(value: 1)
+        let semaphore = DispatchSemaphore(value: option.maxAsyncTasks)
         
     // შეავსეთ  მასივ(ებ)ი ტასკების სტატუსების მიხედვით
         //var tempArray: [DownloadTask] = []
