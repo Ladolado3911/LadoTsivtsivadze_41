@@ -52,12 +52,31 @@ class ViewController: UIViewController {
         let semaphore = DispatchSemaphore(value: 1)
         
     // შეავსეთ  მასივ(ებ)ი ტასკების სტატუსების მიხედვით
-        var tempArray: [DownloadTask] = []
+        //var tempArray: [DownloadTask] = []
         for a in 0..<option.jobCount {
-            let task = DownloadTask(identifier: "\(a)") {_ in }
-            tempArray.append(task)
+            let task = DownloadTask(identifier: "\(a)") { [weak self] task2 in
+                guard let self = self else { return }
+                switch task2.state {
+                case .inProgess:
+                    DispatchQueue.main.async {
+                        self.downloadsTableView.reloadData()
+                    }
+                case .pending:
+                    DispatchQueue.main.async {
+                        self.downloadsTableView.reloadData()
+                    }
+                case .completed:
+                    DispatchQueue.main.async {
+                        self.downloadTasks.remove(at: self.downloadTasks.indexOfTaskWith(identifier: task2.identifier)!)
+                        self.completedTasks.append(task2)
+                        self.downloadsTableView.reloadData()
+                        self.completedTableView.reloadData()
+                    }
+                }
+            }
+            downloadTasks.append(task)
         }
-        downloadTasks = tempArray
+        //downloadTasks = tempArray
 
     // დაიწყეთ ჩამოტვირთვა ტასკების
         //print(downloadTasks)

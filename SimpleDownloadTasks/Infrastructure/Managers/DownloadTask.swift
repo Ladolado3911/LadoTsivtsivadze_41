@@ -39,6 +39,7 @@ class DownloadTask {
                     self?.state = .completed
                     group.leave()
                     semaphore.signal()
+                    print("task completed")
                     //print("here3")
                 }
     }
